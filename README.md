@@ -19,7 +19,7 @@ This app is also built as a way for me to learn new technologies. I want the fro
 
     cd $GOPATH/src
     go get github.com/taironas/route
-    cd $GOPATH/src/github.com/santiaago/pomoti.me
+    cd $GOPATH/src/github.com/taironas/pomoti.me
     go get ./backend
     export PORT=8080
 
