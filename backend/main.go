@@ -10,23 +10,54 @@ import (
 	"github.com/taironas/route"
 )
 
-var root = flag.String("root", "app", "file system path")
+var (
+	prod       = flag.Bool("prod", false, "determines production.")
+	dart       = flag.Bool("dart", true, "determines if dart version should be run.")
+	typescript = flag.Bool("typescript", false, "determines if typescript version should be run.")
+
+	//typescript version
+	typescriptRoot = flag.String("typescriptRoot", "app", "type script root.")
+
+	// dart version
+	// dev: use chromium
+	// prod: use dart2js
+	dartProductionRoot = flag.String("dartProductionRoot", "app-dart/build/web", "dart prod root.")
+	dartDeveloperWeb   = flag.String("dartDeveloperWeb", "app-dart/web", "dart dev web path.")
+	dartDeveloperApp   = flag.String("dartDeveloperApp", "app-dart/", "dart dev app path.")
+)
 
 func init() {
 	log.SetFlags(log.Ltime | log.Ldate | log.Lshortfile)
 }
 
 func main() {
+
+	flag.Parse()
+
 	r := new(route.Router)
 
 	r.HandleFunc("/api/hello", helloWorld)
 
-	r.AddStaticResource(root)
+	setStaticResources(r)
 
 	log.Println("Listening on " + os.Getenv("PORT"))
 	err := http.ListenAndServe(":"+os.Getenv("PORT"), r)
 	if err != nil {
 		log.Fatal("ListenAndServe:", err)
+	}
+}
+
+func setStaticResources(r *route.Router) {
+
+	if *typescript {
+		r.AddStaticResource(typescriptRoot)
+	} else if *dart {
+		if *prod {
+			r.AddStaticResource(dartProductionRoot)
+		} else {
+			r.AddStaticResource(dartDeveloperWeb)
+			r.AddStaticResource(dartDeveloperApp)
+		}
 	}
 }
 
