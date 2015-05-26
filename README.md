@@ -26,15 +26,57 @@ get the source and build the backend.
     export PORT=8080
 
 
+###set up and run the frontend in typescript.
+
 install [node](https://nodejs.org/download/)
 
-set up the frontend.
+install [typescript](http://www.typescriptlang.org/)
 
-    cd app/
-    npm install -g tsd
-    tsd query angular2 --action install
+    >cd app/
+    >npm install -g tsd
+    >tsd query angular2 --action install
 
-## how to make a change
+run app:
+
+    >cd ..
+    >go get ./backend
+    >backend -typescript
+    2015/05/25 18:57:42 main.go:43: Listening on 8080
+
+###set up and run the frontend in dart.
+
+* download [dart](https://www.dartlang.org/downloads/)
+
+* build the frontend
+
+
+    >cd app-dart
+    >pub get
+    >pub build
+
+* run in javascript (prod mode, open in any navigator)
+
+
+    >pwd
+    github.com/taironas/pomiti.me
+    >go get ./backend
+    >backend -dart -prod
+
+* run in dart (dev mode, open in chromium)
+
+
+    >pwd
+    github.com/taironas/pomoti.me
+    >go get ./backend
+    >backend -dart
+    2015/05/25 18:50:57 main.go:43: Listening on 8080
+
+Open `localhost:8080` in chromium.
+
+Note: The good thing with the **dev mode** is that you don't need to build anything, to see the changes, only update the browser.
+
+
+### how to make a change in typescript
 
 you should have 2 terminals.
 
