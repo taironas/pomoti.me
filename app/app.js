@@ -21,7 +21,7 @@ var PomotimeComponent = (function () {
             selector: 'pomotime-app'
         }),
         angular2_1.View({
-            template: '<h1>Hello {{ name }}</h1>'
+            template: '<h1>Hello {{ name }} in typescript</h1>'
         }), 
         __metadata('design:paramtypes', [])
     ], PomotimeComponent);
