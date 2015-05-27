@@ -32,11 +32,13 @@ install [node](https://nodejs.org/download/)
 
 install [typescript](http://www.typescriptlang.org/)
 
+
     >cd app/
     >npm install -g tsd
     >tsd query angular2 --action install
 
 run app:
+
 
     >cd ..
     >go get ./backend
