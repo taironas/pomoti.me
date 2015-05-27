@@ -51,27 +51,32 @@ run app:
 
 * build the frontend
 
-
+~~~
     >cd app-dart
     >pub get
     >pub build
+~~~
 
 * run in javascript (prod mode, open in any navigator)
 
-
+~~~
     >pwd
     github.com/taironas/pomiti.me
     >go get ./backend
     >backend -dart -prod
+~~~~
+
 
 * run in dart (dev mode, open in chromium)
 
 
+~~~
     >pwd
     github.com/taironas/pomoti.me
     >go get ./backend
     >backend -dart
     2015/05/25 18:50:57 main.go:43: Listening on 8080
+~~~
 
 Open `localhost:8080` in chromium.
 
