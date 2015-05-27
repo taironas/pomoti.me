@@ -11,19 +11,14 @@ import (
 )
 
 var (
-	prod       = flag.Bool("prod", false, "determines production.")
-	dart       = flag.Bool("dart", true, "determines if dart version should be run.")
-	typescript = flag.Bool("typescript", false, "determines if typescript version should be run.")
-
-	//typescript version
-	typescriptRoot = flag.String("typescriptRoot", "app", "type script root.")
+	prod = flag.Bool("prod", false, "determines if environment is production.")
 
 	// dart version
 	// dev: use chromium
 	// prod: use dart2js
-	dartProductionRoot = flag.String("dartProductionRoot", "app-dart/build/web", "dart prod root.")
-	dartDeveloperWeb   = flag.String("dartDeveloperWeb", "app-dart/web", "dart dev web path.")
-	dartDeveloperApp   = flag.String("dartDeveloperApp", "app-dart/", "dart dev app path.")
+	dartProductionRoot = flag.String("dartProductionRoot", "app/build/web", "dart prod root.")
+	dartDeveloperWeb   = flag.String("dartDeveloperWeb", "app/web", "dart dev web path.")
+	dartDeveloperApp   = flag.String("dartDeveloperApp", "app/", "dart dev app path.")
 )
 
 func init() {
@@ -49,16 +44,13 @@ func main() {
 
 func setStaticResources(r *route.Router) {
 
-	if *typescript {
-		r.AddStaticResource(typescriptRoot)
-	} else if *dart {
-		if *prod {
-			r.AddStaticResource(dartProductionRoot)
-		} else {
-			r.AddStaticResource(dartDeveloperWeb)
-			r.AddStaticResource(dartDeveloperApp)
-		}
+	if *prod {
+		r.AddStaticResource(dartProductionRoot)
+		return
 	}
+
+	r.AddStaticResource(dartDeveloperWeb)
+	r.AddStaticResource(dartDeveloperApp)
 }
 
 // helloWorld handler returns a json file with a helloworld message.
