@@ -32,7 +32,7 @@ get the source and build the backend.
 * build the frontend
 
 ~~~
-    >cd app-dart
+    >cd app
     >pub get
     >pub build
 ~~~
@@ -43,7 +43,7 @@ get the source and build the backend.
     >pwd
     github.com/taironas/pomiti.me
     >go get ./backend
-    >backend -dart -prod
+    >backend -prod
 ~~~~
 
 
@@ -54,7 +54,7 @@ get the source and build the backend.
     >pwd
     github.com/taironas/pomoti.me
     >go get ./backend
-    >backend -dart
+    >backend
     2015/05/25 18:50:57 main.go:43: Listening on 8080
 ~~~
 
