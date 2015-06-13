@@ -45,6 +45,7 @@ func main() {
 func setStaticResources(r *route.Router) {
 
 	if *prod {
+		log.Println("running in production mode.")
 		r.AddStaticResource(dartProductionRoot)
 		return
 	}
