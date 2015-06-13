@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'package:angular2/angular2.dart';
 import 'dart:convert';
+import 'clock.dart';
 
 // These imports will go away soon:
 import 'package:angular2/src/reflection/reflection.dart' show reflector;
@@ -10,11 +11,12 @@ import 'package:angular2/src/reflection/reflection_capabilities.dart' show Refle
   selector: 'my-app'
 )
 @View(
-  template: '<h1>"{{hello.message}}"</h1>'
+  template: '<p>From golang backend: /api/hello: <i>"{{hello.message}}"<i></p><p>{{clock.message}}</p>'
 )
 
 class AppComponent {
   Hello hello = new Hello();
+  Clock clock = new Clock();
 }
 
 
@@ -33,7 +35,6 @@ class Hello{
             });
   }
 }
-
 
 main() {
   // Temporarily needed.
