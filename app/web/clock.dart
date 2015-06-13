@@ -9,12 +9,17 @@ import 'package:angular2/angular2.dart';
 
 @View(template: '''
 <p>Clock: <i>{{ counter }}</i></p>
-<button (click)="start()" id="startButton">Start</button>
-<button (click)="stop()" id="startButton">Stop</button>
-<button (click)="reset()" id="startButton">Reset</button>
+<p>Start at: 
+<input #userstartat>
+<button (click)="setStartTime(userstartat.value)">set time</button>
+</p>
+<button (click)="start()">Start</button>
+<button (click)="stop()">Stop</button>
+<button (click)="reset()">Reset</button>
 ''')
 
 class Clock{
+  int startAt = (25*60);
   String counter='25:00';
   Stopwatch watch = new Stopwatch();
   Timer timer;
@@ -48,7 +53,7 @@ class Clock{
   }
 
   void updateTimeRemaining(Timer _) {
-    var s  = (25*60) - watch.elapsedMilliseconds~/1000;
+    var s  = startAt - watch.elapsedMilliseconds~/1000;
     var m = 0;
     
     if( s < 0){ 
@@ -63,6 +68,12 @@ class Clock{
     counter = '$minute:$second';
   }
 
-    
+  void setStartTime(string at){
+    print(at);
+    var value = int.parse(at, onError: (source) => null);
+    if (value != null){
+      startAt = value*60;
+    }
+  }
 
 }
