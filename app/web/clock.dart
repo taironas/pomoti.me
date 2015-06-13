@@ -10,6 +10,8 @@ import 'package:angular2/angular2.dart';
 @View(template: '''
 <p>Clock: <i>{{ counter }}</i></p>
 <button (click)="start()" id="startButton">Start</button>
+<button (click)="stop()" id="startButton">Stop</button>
+<button (click)="reset()" id="startButton">Reset</button>
 ''')
 
 class Clock{
@@ -21,6 +23,16 @@ class Clock{
     watch.start();
     var oneSecond = new Duration(seconds:1);
     timer = new Timer.periodic(oneSecond, updateTime);
+  }
+
+  void stop() {
+    watch.stop();
+    timer.cancel();
+  }
+  
+  void reset() {
+    watch.reset();
+    counter = '00:00';
   }
 
   void updateTime(Timer _) {
