@@ -11,12 +11,11 @@ import 'package:angular2/src/reflection/reflection_capabilities.dart' show Refle
   selector: 'my-app'
 )
 @View(
-  template: '<p>From golang backend: /api/hello: <i>"{{hello.message}}"<i></p><p>{{clock.message}}</p>'
+  template: '<p>From golang backend: /api/hello: <i>"{{hello.message}}"<i></p>'
 )
 
 class AppComponent {
   Hello hello = new Hello();
-  Clock clock = new Clock();
 }
 
 
@@ -41,4 +40,5 @@ main() {
   reflector.reflectionCapabilities = new ReflectionCapabilities();
   
   bootstrap(AppComponent);
+  bootstrap(Clock);
 }
