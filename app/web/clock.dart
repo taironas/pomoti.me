@@ -15,7 +15,7 @@ import 'package:angular2/angular2.dart';
 ''')
 
 class Clock{
-  @observable String counter='25:00';
+  String counter='25:00';
   Stopwatch watch = new Stopwatch();
   Timer timer;
   
