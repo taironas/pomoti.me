@@ -9,9 +9,14 @@ import 'package:angular2/angular2.dart';
 
 @View(template: '''
 <p>Clock: <i>{{ counter }}</i></p>
-<p>Start at: 
+<p>Break duration: <i>{{ durationBreak }}</i></p>
+<p>Duration of pomodoro: 
 <input #userstartat>
-<button (click)="setStartTime(userstartat.value)">set time</button>
+<button (click)="setStartTime(userstartat.value)">set</button>
+</p>
+<p>Duration of break: 
+<input #durationbreak>
+<button (click)="setDurationBreak(durationbreak.value)">set</button>
 </p>
 <button (click)="start()">Start</button>
 <button (click)="stop()">Stop</button>
@@ -19,10 +24,18 @@ import 'package:angular2/angular2.dart';
 ''')
 
 class Clock{
-  int startAt = (25*60);
-  String counter='25:00';
+
+  int startAt;
+  String durationBreak;
+  String counter;
   Stopwatch watch = new Stopwatch();
   Timer timer;
+
+  Clock(){
+    startAt = (25*60);
+    durationBreak = prettyPrintTime(5);
+    counter= prettyPrintTime(25);
+  }
   
   void start() {
     watch.start();
@@ -69,11 +82,28 @@ class Clock{
   }
 
   void setStartTime(string at){
-    print(at);
     var value = int.parse(at, onError: (source) => null);
     if (value != null){
       startAt = value*60;
     }
   }
 
+  void setDurationBreak(string d){
+    var value = int.parse(d, onError: (source) => null);
+    if (value != null){
+      durationBreak = prettyPrintTime(value);
+    }
+  }
+
+  String prettyPrintTime(int s){
+    s = s * 60;
+    var m = 0;
+    
+    // The operator ~/ divides and returns an integer.
+    if (s >= 60) { m = s ~/ 60; s = s % 60; }
+    
+    String minute = (m <= 9) ? '0$m' : '$m';
+    String second = (s <= 9) ? '0$s' : '$s';
+    return '$minute:$second';
+  }
 }
