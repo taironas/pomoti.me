@@ -24,16 +24,17 @@ import 'package:angular2/angular2.dart';
 
 class Clock{
 
-  int startAt;
+  int startPomodoroAt, startBreakAt;
   String durationBreak, durationPomodoro;
   String counter;
   Stopwatch watch = new Stopwatch();
   Timer timer;
 
   Clock(){
-    startAt = (25*60);
-    durationBreak = prettyPrintTime(5*60);
-    durationPomodoro = prettyPrintTime(25*60);
+    startPomodoroAt = (25*60);
+    startBreakAt = (5*60);
+    durationBreak = prettyPrintTime(startBreakAt);
+    durationPomodoro = prettyPrintTime(startPomodoroAt);
     counter= prettyPrintTime(25*60);
   }
   
@@ -66,7 +67,7 @@ class Clock{
   }
 
   void updateTimeRemaining(Timer _) {
-    var s  = startAt - watch.elapsedMilliseconds~/1000;
+    var s  = startPomodoroAt - watch.elapsedMilliseconds~/1000;
     
     if( s < 0){ 
       stop();
@@ -78,8 +79,8 @@ class Clock{
   void setDurationPomodoro(string duration){
     var value = int.parse(duration, onError: (source) => null);
     if (value != null){
-      startAt = value*60;
-      durationPomodoro = prettyPrintTime(startAt);
+      startPomodoroAt = value*60;
+      durationPomodoro = prettyPrintTime(startPomodoroAt);
       counter = durationPomodoro;
     }
   }
