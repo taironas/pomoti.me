@@ -13,8 +13,8 @@ import 'package:angular2/angular2.dart';
 <button (click)="stop()">Stop</button>
 <button (click)="reset()">Reset</button>
 <p>Pomodoro duration: <i>{{ durationPomodoro }}</i>
-<input #userstartat>
-<button (click)="setDurationPomodoro(userstartat.value)">change</button>
+<input #durationpomodoro>
+<button (click)="setDurationPomodoro(durationpomodoro.value)">change</button>
 </p>
 <p>Break duration: <i>{{ durationBreak }}</i>
 <input #durationbreak>
@@ -75,16 +75,17 @@ class Clock{
     counter = prettyPrintTime(s);
   }
 
-  void setDurationPomodoro(string at){
-    var value = int.parse(at, onError: (source) => null);
+  void setDurationPomodoro(string duration){
+    var value = int.parse(duration, onError: (source) => null);
     if (value != null){
       startAt = value*60;
       durationPomodoro = prettyPrintTime(startAt);
+      counter = durationPomodoro;
     }
   }
 
-  void setDurationBreak(string d){
-    var value = int.parse(d, onError: (source) => null);
+  void setDurationBreak(string duration){
+    var value = int.parse(duration, onError: (source) => null);
     if (value != null){
       durationBreak = prettyPrintTime(value*60);
     }
