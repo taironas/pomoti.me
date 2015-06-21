@@ -9,19 +9,17 @@ import 'package:angular2/angular2.dart';
 
 @View(template: '''
 <p>Clock: <i>{{ counter }}</i></p>
-<p>Break duration: <i>{{ durationBreak }}</i></p>
-<p>Pomodoro duration: <i>{{ durationPomodoro }}</i></p>
-<p>Duration of pomodoro: 
-<input #userstartat>
-<button (click)="setDurationPomodoro(userstartat.value)">set</button>
-</p>
-<p>Duration of break: 
-<input #durationbreak>
-<button (click)="setDurationBreak(durationbreak.value)">set</button>
-</p>
 <button (click)="start()">Start</button>
 <button (click)="stop()">Stop</button>
 <button (click)="reset()">Reset</button>
+<p>Pomodoro duration: <i>{{ durationPomodoro }}</i>
+<input #userstartat>
+<button (click)="setDurationPomodoro(userstartat.value)">change</button>
+</p>
+<p>Break duration: <i>{{ durationBreak }}</i>
+<input #durationbreak>
+<button (click)="setDurationBreak(durationbreak.value)">change</button>
+</p>
 ''')
 
 class Clock{
