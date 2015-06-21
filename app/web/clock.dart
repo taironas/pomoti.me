@@ -13,7 +13,7 @@ import 'package:angular2/angular2.dart';
 <p>Pomodoro duration: <i>{{ durationPomodoro }}</i></p>
 <p>Duration of pomodoro: 
 <input #userstartat>
-<button (click)="setStartTime(userstartat.value)">set</button>
+<button (click)="setDurationPomodoro(userstartat.value)">set</button>
 </p>
 <p>Duration of break: 
 <input #durationbreak>
@@ -77,10 +77,11 @@ class Clock{
     counter = prettyPrintTime(s);
   }
 
-  void setStartTime(string at){
+  void setDurationPomodoro(string at){
     var value = int.parse(at, onError: (source) => null);
     if (value != null){
       startAt = value*60;
+      durationPomodoro = prettyPrintTime(startAt);
     }
   }
 
