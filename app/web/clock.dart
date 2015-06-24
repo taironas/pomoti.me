@@ -66,14 +66,7 @@ class Clock{
 
   void updateTime(Timer _) {
     var s = watch.elapsedMilliseconds~/1000;
-    var m = 0;
-    
-    // The operator ~/ divides and returns an integer.
-    if (s >= 60) { m = s ~/ 60; s = s % 60; }
-    
-    String minute = (m <= 9) ? '0$m' : '$m';
-    String second = (s <= 9) ? '0$s' : '$s';
-    counter = '$minute:$second';
+    counter = prettyPrintTime(s);
   }
 
   void updateTimeRemaining(Timer _) {
