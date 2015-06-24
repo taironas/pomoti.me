@@ -61,7 +61,7 @@ class Clock{
   
   void reset() {
     watch.reset();
-    counter = '00:00';
+    counter = prettyPrintTime(startPomodoroAt);
   }
 
   void updateTime(Timer _) {
