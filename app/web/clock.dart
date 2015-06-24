@@ -31,7 +31,7 @@ enum ClockState{
 
 class Clock{
 
-  int startPomodoroAt, startRestAt;
+  int startPomodoroAt, startRestAt, currentDuration;
   String durationRest, durationPomodoro;
   String counter;
   Stopwatch watch = new Stopwatch();
@@ -46,6 +46,7 @@ class Clock{
     durationPomodoro = prettyPrintTime(startPomodoroAt);
     counter= prettyPrintTime(25*60);
     currentState = ClockState.pomodoro;
+    currentDuration = startPomodoroAt;
   }
   
   void start() {
@@ -61,7 +62,7 @@ class Clock{
   
   void reset() {
     watch.reset();
-    counter = prettyPrintTime(startPomodoroAt);
+    counter = prettyPrintTime(currentDuration);
   }
 
   void updateTime(Timer _) {
@@ -69,11 +70,21 @@ class Clock{
     counter = prettyPrintTime(s);
   }
 
+  void updateState(){
+    if (currentState == ClockState.pomodoro){
+      currentState = ClockState.rest;
+      return;
+    }
+    currentState = ClockState.pomodoro;
+  }
+
   void updateTimeRemaining(Timer _) {
-    var s  = startPomodoroAt - watch.elapsedMilliseconds~/1000;
+    var s  = currentDuration - watch.elapsedMilliseconds~/1000;
     
     if( s < 0){ 
-      stop();
+      updateState();
+      setCounter();
+      reset();
       return; 
     }
     counter = prettyPrintTime(s);
@@ -84,14 +95,35 @@ class Clock{
     if (value != null){
       startPomodoroAt = value*60;
       durationPomodoro = prettyPrintTime(startPomodoroAt);
-      counter = durationPomodoro;
+      if (currentState == ClockState.pomodoro){
+        counter = durationPomodoro;
+        currentDuration = startPomodoroAt;
+      }
     }
   }
 
   void setDurationRest(string duration){
     var value = int.parse(duration, onError: (source) => null);
     if (value != null){
-      durationRest = prettyPrintTime(value*60);
+      startRestAt = value*60;
+      durationRest = prettyPrintTime(startRestAt);
+      if (currentState == ClockState.rest){
+        counter = durationRest;
+        currentDuration = startPomodoroAt;
+      }      
+    }
+  }
+
+  void setCounter(){
+    switch(currentState){
+      case ClockState.pomodoro:
+        counter = prettyPrintTime(startPomodoroAt);
+        currentDuration = startPomodoroAt;
+        break;
+      case ClockState.rest:
+        counter = prettyPrintTime(startRestAt);
+        currentDuration = startRestAt;
+        break;
     }
   }
 
