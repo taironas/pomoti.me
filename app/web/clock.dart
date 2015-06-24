@@ -5,6 +5,11 @@ import 'dart:async';
 
 import 'package:angular2/angular2.dart';
 
+enum ClockState{
+  pomodoro,
+  rest
+}
+
 @Component(selector: 'clock')
 
 @View(template: '''
@@ -12,6 +17,8 @@ import 'package:angular2/angular2.dart';
 <button (click)="start()">Start</button>
 <button (click)="stop()">Stop</button>
 <button (click)="reset()">Reset</button>
+<p *ng-if="isPomotime()">Currently in pomodoro</p>
+<p *ng-if="!isPomotime()">Currently in rest</p>
 <p>Pomodoro duration: <i>{{ durationPomodoro }}</i>
 <input #durationpomodoro>
 <button (click)="setDurationPomodoro(durationpomodoro.value)">change</button>
@@ -20,7 +27,7 @@ import 'package:angular2/angular2.dart';
 <input #durationrest>
 <button (click)="setDurationRest(durationrest.value)">change</button>
 </p>
-''')
+''', directives: const [NgIf])
 
 class Clock{
 
@@ -30,12 +37,15 @@ class Clock{
   Stopwatch watch = new Stopwatch();
   Timer timer;
 
+  ClockState currentState;
+
   Clock(){
     startPomodoroAt = (25*60);
     startRestAt = (5*60);
     durationRest = prettyPrintTime(startRestAt);
     durationPomodoro = prettyPrintTime(startPomodoroAt);
     counter= prettyPrintTime(25*60);
+    currentState = ClockState.pomodoro;
   }
   
   void start() {
@@ -101,5 +111,9 @@ class Clock{
     String minute = (m <= 9) ? '0$m' : '$m';
     String second = (s <= 9) ? '0$s' : '$s';
     return '$minute:$second';
+  }
+
+  bool isPomotime(){
+    return currentState == ClockState.pomodoro;
   }
 }
