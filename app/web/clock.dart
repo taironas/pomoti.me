@@ -27,7 +27,13 @@ enum ClockState{
 <input #durationrest>
 <button (click)="setDurationRest(durationrest.value)">change</button>
 </p>
-''', directives: const [NgIf])
+<p>History:</p>
+<ul>
+    <li *ng-for="#time of times">
+        {{time}}
+    </li>
+</ul>
+''', directives: const [NgFor, NgIf])
 
 class Clock{
 
@@ -36,6 +42,7 @@ class Clock{
   String counter;
   Stopwatch watch = new Stopwatch();
   Timer timer;
+  List<String> times;
 
   ClockState currentState;
 
@@ -47,6 +54,7 @@ class Clock{
     counter= prettyPrintTime(25*60);
     currentState = ClockState.pomodoro;
     currentDuration = startPomodoroAt;
+    times = new List();
   }
   
   void start() {
@@ -84,10 +92,22 @@ class Clock{
     if( s < 0){ 
       updateState();
       setCounter();
+      addToHistory();
       reset();
       return; 
     }
     counter = prettyPrintTime(s);
+  }
+
+  void addToHistory(){
+    switch(currentState){
+      case ClockState.pomodoro:
+        times.add("rest");
+        break;
+      case ClockState.rest:
+        times.add("pomodoro");
+        break;
+    }
   }
 
   void setDurationPomodoro(string duration){
