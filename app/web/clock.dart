@@ -10,6 +10,14 @@ enum ClockState{
   rest
 }
 
+class Period{
+  DateTime start;
+  DateTime end;
+  string label;
+
+  Period(this.start, this.end, this.label);
+}
+
 @Component(selector: 'clock')
 
 @View(template: '''
@@ -29,8 +37,8 @@ enum ClockState{
 </p>
 <p>History:</p>
 <ul>
-    <li *ng-for="#time of times">
-        {{time}}
+    <li *ng-for="#period of periods">
+        {{period.start}} | {{period.end}} | {{period.label}}
     </li>
 </ul>
 ''', directives: const [NgFor, NgIf])
@@ -42,7 +50,7 @@ class Clock{
   String counter;
   Stopwatch watch = new Stopwatch();
   Timer timer;
-  List<String> times;
+  List<Period> periods;
 
   ClockState currentState;
 
@@ -54,7 +62,7 @@ class Clock{
     counter= prettyPrintTime(25*60);
     currentState = ClockState.pomodoro;
     currentDuration = startPomodoroAt;
-    times = new List();
+    periods = new List();
   }
   
   void start() {
@@ -102,10 +110,16 @@ class Clock{
   void addToHistory(){
     switch(currentState){
       case ClockState.pomodoro:
-        times.add("rest");
+        var now = new DateTime.now();
+        var start = now.subtract(new Duration(seconds: startRestAt));
+        var end = now;
+        periods.add(new Period(start, end,"rest"));
         break;
       case ClockState.rest:
-        times.add("pomodoro");
+        var now = new DateTime.now();
+        var start = now.subtract(new Duration(seconds: startPomodoroAt));
+        var end = now;
+        periods.add(new Period(start, end,"pomodoro"));
         break;
     }
   }
