@@ -25,6 +25,7 @@ class Period{
 <button (click)="start()">Start</button>
 <button (click)="stop()">Stop</button>
 <button (click)="reset()">Reset</button>
+<button (click)="skip()">Skip</button>
 <p *ng-if="isPomotime()">Currently in pomodoro</p>
 <p *ng-if="!isPomotime()">Currently in rest</p>
 <p>Pomodoro duration: <i>{{ durationPomodoro }}</i>
@@ -81,6 +82,12 @@ class Clock{
     counter = prettyPrintTime(currentDuration);
   }
 
+  void skip(){
+    updateState();
+    setCounter();
+    reset();
+  }
+  
   void updateTime(Timer _) {
     var s = watch.elapsedMilliseconds~/1000;
     counter = prettyPrintTime(s);
