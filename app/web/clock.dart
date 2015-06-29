@@ -2,6 +2,7 @@ library clock;
 
 import 'dart:html';
 import 'dart:async';
+import 'package:intl/intl.dart'; // datetime formatter
 
 import 'package:angular2/angular2.dart';
 
@@ -39,7 +40,7 @@ class Period{
 <p>History:</p>
 <ul>
     <li *ng-for="#period of sortPeriods()">
-        {{period.start}} | {{period.end}} | {{period.label}}
+        {{formatTime(period.start)}} | {{formatTime(period.end)}} | {{period.label}}
     </li>
 </ul>
 ''', directives: const [NgFor, NgIf])
@@ -54,6 +55,7 @@ class Clock{
   List<Period> periods;
 
   ClockState currentState;
+  DateFormat formatter;
 
   Clock(){
     startPomodoroAt = (25*60);
@@ -64,6 +66,7 @@ class Clock{
     currentState = ClockState.pomodoro;
     currentDuration = startPomodoroAt;
     periods = new List();
+    formatter = new DateFormat('MM-dd-yyyy HH:mm:ss');
   }
   
   void start() {
@@ -186,5 +189,9 @@ class Clock{
 
   bool isPomotime(){
     return currentState == ClockState.pomodoro;
+  }
+
+  string formatTime(t){
+    return formatter.format(t);
   }
 }

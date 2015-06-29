@@ -4,3 +4,4 @@ dependencies:
   angular2: 2.0.0-alpha.27
   browser: any
   json_object: any
+  intl: 0.12.4
