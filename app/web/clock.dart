@@ -37,7 +37,7 @@ class Period{
 </p>
 <p>History:</p>
 <ul>
-    <li *ng-for="#period of periods">
+    <li *ng-for="#period of sortPeriods()">
         {{period.start}} | {{period.end}} | {{period.label}}
     </li>
 </ul>
@@ -146,6 +146,11 @@ class Clock{
         currentDuration = startPomodoroAt;
       }      
     }
+  }
+
+  List<Period> sortPeriods(){
+    periods.sort((x, y) => x.end.compareTo(y.end));
+    return periods;
   }
 
   void setCounter(){
