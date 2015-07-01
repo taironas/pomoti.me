@@ -32,7 +32,7 @@ func main() {
 	r := new(route.Router)
 
 	r.HandleFunc("/api/hello", helloWorld)
-
+	r.HandleFunc("/api/mongo", mongo)
 	setStaticResources(r)
 
 	log.Println("Listening on " + os.Getenv("PORT"))
