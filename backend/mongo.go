@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -15,12 +16,17 @@ type Period struct {
 // mongo handler returns a json file with a mongo message.
 //
 func mongo(w http.ResponseWriter, r *http.Request) {
+
+	uri := os.Getenv("MONGOLAB_URI")
+	log.Println("uri found: ", uri)
 	var err error
 	var session *mgo.Session
 
-	if session, err = mgo.Dial("localhost"); err != nil {
+	log.Println("start dial")
+	if session, err = mgo.Dial(uri); err != nil {
 		panic(err)
 	}
+	log.Println("dial done")
 
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
