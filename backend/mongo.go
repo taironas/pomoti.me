@@ -17,8 +17,16 @@ type Period struct {
 //
 func mongo(w http.ResponseWriter, r *http.Request) {
 
-	uri := os.Getenv("MONGOLAB_URI")
+	var uri string
+
+	if *prod {
+		uri = os.Getenv("MONGOLAB_URI")
+	} else {
+		uri = "localhost"
+	}
+
 	log.Println("uri found: ", uri)
+
 	var err error
 	var session *mgo.Session
 
@@ -29,10 +37,13 @@ func mongo(w http.ResponseWriter, r *http.Request) {
 	log.Println("dial done")
 
 	defer session.Close()
+	log.Println("setting session mode")
 	session.SetMode(mgo.Monotonic, true)
 
-	c := session.DB("pomotime").C("period")
+	log.Println("trying to get pomotime database")
+	c := session.DB("").C("period")
 
+	log.Println("start inster to period entity")
 	var p1, p2 Period
 	p1 = Period{"pomodoro"}
 	p2 = Period{"rest"}
@@ -43,10 +54,12 @@ func mongo(w http.ResponseWriter, r *http.Request) {
 
 	var result1, result2 Period
 
+	log.Println("start search for pomodoro object")
 	if err = c.Find(bson.M{"type": "pomodoro"}).One(&result1); err != nil {
 		log.Fatal(err)
 	}
 
+	log.Println("start search for rest object")
 	if err = c.Find(bson.M{"type": "rest"}).One(&result2); err != nil {
 		log.Fatal(err)
 	}
@@ -65,6 +78,7 @@ func mongo(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
+	log.Println("sending response")
 	if err := renderJson(w, data); err != nil {
 		log.Println(err)
 	}
