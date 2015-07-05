@@ -3,27 +3,17 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
-
-type Period struct {
-	Type string
-}
 
 // mongo handler returns a json file with a mongo message.
 //
 func mongo(w http.ResponseWriter, r *http.Request) {
 
 	var uri string
-
-	if *prod {
-		uri = os.Getenv("MONGOLAB_URI")
-	} else {
-		uri = "localhost"
-	}
+	uri = getMongoURI()
 
 	log.Println("uri found: ", uri)
 
@@ -43,7 +33,7 @@ func mongo(w http.ResponseWriter, r *http.Request) {
 	log.Println("trying to get pomotime database")
 	c := session.DB("").C("period")
 
-	log.Println("start inster to period entity")
+	log.Println("start insert to period entity")
 	var p1, p2 Period
 	p1 = Period{"pomodoro"}
 	p2 = Period{"rest"}

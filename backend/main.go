@@ -33,6 +33,8 @@ func main() {
 
 	r.HandleFunc("/api/hello", helloWorld)
 	r.HandleFunc("/api/mongo", mongo)
+	r.HandleFunc("/api/periods", getPeriods)
+	r.HandleFunc("/api/period/create", createPeriod)
 	setStaticResources(r)
 
 	log.Println("Listening on " + os.Getenv("PORT"))
