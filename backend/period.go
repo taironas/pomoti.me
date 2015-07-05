@@ -9,7 +9,7 @@ import (
 
 // Period hold the information of an activity
 type Period struct {
-	Type string // pomodoro or rest
+	Type string `json:"type"` // pomodoro or rest
 }
 
 type Periods []Period
@@ -17,6 +17,46 @@ type Periods []Period
 // createPeriod handler lets you create a period obect.
 //
 func createPeriod(w http.ResponseWriter, r *http.Request) {
+
+	var strType string
+
+	if strType = r.FormValue("type"); len(strType) == 0 {
+		log.Println("empty type")
+		data := struct {
+			Status           int    `json:"status"`
+			DeveloperMessage string `json:"developerMessage"`
+			UserMessage      string `json:"userMessage"`
+		}{
+			Status:           400,
+			DeveloperMessage: "createPeriod had empty type parameter, unable to create period.",
+			UserMessage:      "Oops, something went wrong, we are unable to save your data right now.",
+		}
+
+		log.Println("sending response")
+		if err := renderJson(w, data); err != nil {
+			log.Println(err)
+		}
+		return
+	} else {
+		if strType != "pomodoro" && strType != "rest" {
+			log.Println("empty type")
+			data := struct {
+				Status           int    `json:"status"`
+				DeveloperMessage string `json:"developerMessage"`
+				UserMessage      string `json:"userMessage"`
+			}{
+				Status:           400,
+				DeveloperMessage: "createPeriod has wrong type, unable to create period.",
+				UserMessage:      "Oops, something went wrong, we are unable to save your data right now.",
+			}
+
+			log.Println("sending response")
+			if err := renderJson(w, data); err != nil {
+				log.Println(err)
+			}
+			return
+		}
+	}
 
 	var uri string
 	uri = getMongoURI()
@@ -41,7 +81,7 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("start insert to period entity")
 	var p Period
-	p = Period{"pomodoro"}
+	p = Period{strType}
 
 	if err = collection.Insert(&p); err != nil {
 		log.Fatal(err)
