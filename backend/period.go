@@ -22,6 +22,9 @@ type standardResponse struct {
 	UserMessage      string `json:"userMessage"`
 }
 
+// createStandardResponse creates a standard response object with respect to the
+// status, the developer message and the user message.
+//
 func createStandardResponse(status int, devMsg, userMsg string) standardResponse {
 	return standardResponse{
 		Status:           status,
@@ -39,7 +42,6 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 		userMessage := "Oops, something went wrong, we are unable to save your data right now."
 		response := createStandardResponse(400, developerMessage, userMessage)
 		w.WriteHeader(http.StatusBadRequest)
-
 		log.Println("sending response")
 
 		if err := renderJson(w, response); err != nil {
