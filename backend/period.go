@@ -25,7 +25,7 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 			UserMessage      string `json:"userMessage"`
 		}{
 			Status:           400,
-			DeveloperMessage: "createPeriod only POST request are supported for this route.",
+			DeveloperMessage: "createPeriod only POST requests are supported for this route.",
 			UserMessage:      "Oops, something went wrong, we are unable to save your data right now.",
 		}
 
@@ -124,6 +124,24 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 // getPeriods handler returns a list of periods.
 //
 func getPeriods(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != "GET" {
+		data := struct {
+			Status           int    `json:"status"`
+			DeveloperMessage string `json:"developerMessage"`
+			UserMessage      string `json:"userMessage"`
+		}{
+			Status:           400,
+			DeveloperMessage: "getPeriods: only GET requests are supported for this route.",
+			UserMessage:      "Oops, something went wrong, we are unable to get your data right now.",
+		}
+
+		log.Println("sending response")
+		if err := renderJson(w, data); err != nil {
+			log.Println(err)
+		}
+		return
+	}
 
 	var uri string
 	uri = getMongoURI()
