@@ -37,13 +37,13 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 	session.SetMode(mgo.Monotonic, true)
 
 	log.Println("trying to get pomotime database")
-	c := session.DB("").C("period")
+	collection := session.DB("").C("period")
 
 	log.Println("start insert to period entity")
 	var p Period
 	p = Period{"pomodoro"}
 
-	if err = c.Insert(&p); err != nil {
+	if err = collection.Insert(&p); err != nil {
 		log.Fatal(err)
 	}
 
@@ -86,12 +86,12 @@ func getPeriods(w http.ResponseWriter, r *http.Request) {
 	session.SetMode(mgo.Monotonic, true)
 
 	log.Println("trying database")
-	c := session.DB("").C("period")
+	collection := session.DB("").C("period")
 
 	var results []Period
 
 	log.Println("start search for all period objects")
-	if err = c.Find(nil).All(&results); err != nil {
+	if err = collection.Find(nil).All(&results); err != nil {
 		log.Fatal(err)
 	}
 
