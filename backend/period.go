@@ -28,8 +28,10 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 			DeveloperMessage: "createPeriod only POST requests are supported for this route.",
 			UserMessage:      "Oops, something went wrong, we are unable to save your data right now.",
 		}
+		w.WriteHeader(http.StatusBadRequest)
 
 		log.Println("sending response")
+
 		if err := renderJson(w, data); err != nil {
 			log.Println(err)
 		}
@@ -49,7 +51,7 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 			DeveloperMessage: "createPeriod had empty type parameter, unable to create period.",
 			UserMessage:      "Oops, something went wrong, we are unable to save your data right now.",
 		}
-
+		w.WriteHeader(http.StatusBadRequest)
 		log.Println("sending response")
 		if err := renderJson(w, data); err != nil {
 			log.Println(err)
@@ -67,7 +69,7 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 				DeveloperMessage: "createPeriod has wrong type, unable to create period.",
 				UserMessage:      "Oops, something went wrong, we are unable to save your data right now.",
 			}
-
+			w.WriteHeader(http.StatusBadRequest)
 			log.Println("sending response")
 			if err := renderJson(w, data); err != nil {
 				log.Println(err)
@@ -135,7 +137,7 @@ func getPeriods(w http.ResponseWriter, r *http.Request) {
 			DeveloperMessage: "getPeriods: only GET requests are supported for this route.",
 			UserMessage:      "Oops, something went wrong, we are unable to get your data right now.",
 		}
-
+		w.WriteHeader(http.StatusBadRequest)
 		log.Println("sending response")
 		if err := renderJson(w, data); err != nil {
 			log.Println(err)
