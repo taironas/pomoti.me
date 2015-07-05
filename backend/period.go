@@ -12,27 +12,37 @@ type Period struct {
 	Type string `json:"type"` // pomodoro or rest
 }
 
+// Periods holds an array of Period type.
+//
 type Periods []Period
+
+type standardResponse struct {
+	Status           int    `json:"status"`
+	DeveloperMessage string `json:"developerMessage"`
+	UserMessage      string `json:"userMessage"`
+}
+
+func createStandardResponse(status int, devMsg, userMsg string) standardResponse {
+	return standardResponse{
+		Status:           status,
+		DeveloperMessage: devMsg,
+		UserMessage:      userMsg,
+	}
+}
 
 // createPeriod handler lets you create a period obect.
 //
 func createPeriod(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "POST" {
-		data := struct {
-			Status           int    `json:"status"`
-			DeveloperMessage string `json:"developerMessage"`
-			UserMessage      string `json:"userMessage"`
-		}{
-			Status:           400,
-			DeveloperMessage: "createPeriod only POST requests are supported for this route.",
-			UserMessage:      "Oops, something went wrong, we are unable to save your data right now.",
-		}
+		developerMessage := "createPeriod only POST requests are supported for this route."
+		userMessage := "Oops, something went wrong, we are unable to save your data right now."
+		response := createStandardResponse(400, developerMessage, userMessage)
 		w.WriteHeader(http.StatusBadRequest)
 
 		log.Println("sending response")
 
-		if err := renderJson(w, data); err != nil {
+		if err := renderJson(w, response); err != nil {
 			log.Println(err)
 		}
 		return
@@ -41,37 +51,23 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 	var strType string
 
 	if strType = r.FormValue("type"); len(strType) == 0 {
-		log.Println("empty type")
-		data := struct {
-			Status           int    `json:"status"`
-			DeveloperMessage string `json:"developerMessage"`
-			UserMessage      string `json:"userMessage"`
-		}{
-			Status:           400,
-			DeveloperMessage: "createPeriod had empty type parameter, unable to create period.",
-			UserMessage:      "Oops, something went wrong, we are unable to save your data right now.",
-		}
+		developerMessage := "createPeriod had empty type parameter, unable to create period."
+		userMessage := "Oops, something went wrong, we are unable to save your data right now."
+		response := createStandardResponse(400, developerMessage, userMessage)
 		w.WriteHeader(http.StatusBadRequest)
 		log.Println("sending response")
-		if err := renderJson(w, data); err != nil {
+		if err := renderJson(w, response); err != nil {
 			log.Println(err)
 		}
 		return
 	} else {
 		if strType != "pomodoro" && strType != "rest" {
-			log.Println("empty type")
-			data := struct {
-				Status           int    `json:"status"`
-				DeveloperMessage string `json:"developerMessage"`
-				UserMessage      string `json:"userMessage"`
-			}{
-				Status:           400,
-				DeveloperMessage: "createPeriod has wrong type, unable to create period.",
-				UserMessage:      "Oops, something went wrong, we are unable to save your data right now.",
-			}
+			developerMessage := "createPeriod has wrong type, unable to create period."
+			userMessage := "Oops, something went wrong, we are unable to save your data right now."
+			response := createStandardResponse(400, developerMessage, userMessage)
 			w.WriteHeader(http.StatusBadRequest)
 			log.Println("sending response")
-			if err := renderJson(w, data); err != nil {
+			if err := renderJson(w, response); err != nil {
 				log.Println(err)
 			}
 			return
@@ -128,18 +124,12 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 func getPeriods(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "GET" {
-		data := struct {
-			Status           int    `json:"status"`
-			DeveloperMessage string `json:"developerMessage"`
-			UserMessage      string `json:"userMessage"`
-		}{
-			Status:           400,
-			DeveloperMessage: "getPeriods: only GET requests are supported for this route.",
-			UserMessage:      "Oops, something went wrong, we are unable to get your data right now.",
-		}
+		developerMessage := "getPeriods: only GET requests are supported for this route."
+		userMessage := "Oops, something went wrong, we are unable to get your data right now."
+		response := createStandardResponse(400, developerMessage, userMessage)
 		w.WriteHeader(http.StatusBadRequest)
 		log.Println("sending response")
-		if err := renderJson(w, data); err != nil {
+		if err := renderJson(w, response); err != nil {
 			log.Println(err)
 		}
 		return
