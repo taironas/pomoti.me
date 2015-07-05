@@ -18,6 +18,24 @@ type Periods []Period
 //
 func createPeriod(w http.ResponseWriter, r *http.Request) {
 
+	if r.Method != "POST" {
+		data := struct {
+			Status           int    `json:"status"`
+			DeveloperMessage string `json:"developerMessage"`
+			UserMessage      string `json:"userMessage"`
+		}{
+			Status:           400,
+			DeveloperMessage: "createPeriod only POST request are supported for this route.",
+			UserMessage:      "Oops, something went wrong, we are unable to save your data right now.",
+		}
+
+		log.Println("sending response")
+		if err := renderJson(w, data); err != nil {
+			log.Println(err)
+		}
+		return
+	}
+
 	var strType string
 
 	if strType = r.FormValue("type"); len(strType) == 0 {
