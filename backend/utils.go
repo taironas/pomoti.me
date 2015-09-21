@@ -12,7 +12,7 @@ func getMongoURI() (uri string) {
 	}
 
 	if len(uri) == 0 {
-		uri = "localhost"
+		uri = "127.0.0.1"
 	}
 	return
 }

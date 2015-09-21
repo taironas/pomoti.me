@@ -58,6 +58,17 @@ get the source and build the backend.
     2015/05/25 18:50:57 main.go:43: Listening on 8080
 ~~~
 
+* start mongo db server in localhost:
+
+~~~
+    >pwd
+    github.com/taironas/pomoti.me
+    >sudo mongod --bind_ip 127.0.0.1
+~~~
+
+Then start the app in dev mode.
+
 Open `localhost:8080` in chromium.
 
 Note: The good thing with the **dev mode** is that you don't need to build anything, to see the changes, only update the browser.
+
