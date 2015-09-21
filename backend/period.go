@@ -3,13 +3,16 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"gopkg.in/mgo.v2"
 )
 
 // Period hold the information of an activity
 type Period struct {
-	Type string `json:"type"` // pomodoro or rest
+	Type  string `json:"type"` // pomodoro or rest
+	Start time.Time
+	End   time.Time
 }
 
 // Periods holds an array of Period type.
@@ -99,7 +102,11 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("start insert to period entity")
 	var p Period
-	p = Period{strType}
+	p = Period{
+		Type:  strType,
+		Start: time.Now(),
+		End:   time.Now(),
+	}
 
 	if err = collection.Insert(&p); err != nil {
 		log.Fatal(err)

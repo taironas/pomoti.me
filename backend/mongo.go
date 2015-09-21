@@ -35,8 +35,8 @@ func mongo(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("start insert to period entity")
 	var p1, p2 Period
-	p1 = Period{"pomodoro"}
-	p2 = Period{"rest"}
+	p1 = Period{Type: "pomodoro"}
+	p2 = Period{Type: "rest"}
 
 	if err = collection.Insert(&p1, &p2); err != nil {
 		log.Fatal(err)
