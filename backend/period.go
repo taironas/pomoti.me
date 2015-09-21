@@ -111,7 +111,7 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 	if err = collection.Insert(&p); err != nil {
 		log.Fatal(err)
 	}
-
+	log.Println("insert period entity done")
 	data := struct {
 		Status           int    `json:"status"`
 		DeveloperMessage string `json:"developerMessage"`

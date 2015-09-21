@@ -124,12 +124,22 @@ class Clock{
         var start = now.subtract(new Duration(seconds: startRestAt));
         var end = now;
         periods.add(new Period(start, end,"rest"));
+        var data = { 'type' : 'pomodoro' };
+        HttpRequest.postFormData('/api/period/create', data).then((HttpRequest response) {
+          print("Response status: ${response.status}");
+          print("Response body: ${response.response}");
+        });
         break;
       case ClockState.rest:
         var now = new DateTime.now();
         var start = now.subtract(new Duration(seconds: startPomodoroAt));
         var end = now;
         periods.add(new Period(start, end,"pomodoro"));
+        var data = { 'type' : 'pomodoro' };
+        HttpRequest.postFormData('/api/period/create', data).then((HttpRequest response) {
+          print("Response status: ${response.status}");
+          print("Response body: ${response.response}");
+        });
         break;
     }
   }
