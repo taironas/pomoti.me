@@ -63,7 +63,7 @@ get the source and build the backend.
 ~~~
     >pwd
     github.com/taironas/pomoti.me
-    >sudo mongod --bind_ip 127.0.0.1 --httpinterface
+    >sudo mongod --bind_ip 127.0.0.1 --httpinterface --rest
 ~~~
 
 Then start the app in dev mode.
@@ -74,3 +74,7 @@ To access mongodb go to [http://localhost:28017/](http://localhost:28017/)
 
 Note: The good thing with the **dev mode** is that you don't need to build anything, to see the changes, only update the browser.
 
+* mongodb http interface:
+
+* access mongodb interface [http://localhost:28017/](http://localhost:28017/)
+* list collections: [http://127.0.0.1:28017/pomotime/period/?limit=-10](http://127.0.0.1:28017/pomotime/period/?limit=-10)
