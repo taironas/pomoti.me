@@ -100,47 +100,44 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 	if strType = r.FormValue("type"); len(strType) == 0 {
 		c.emptyParam("type")
 		return
-	} else {
-		if strType != "pomodoro" && strType != "rest" {
-			c.wrongParamValue("type")
-			return
-		}
+	}
+
+	if strType != "pomodoro" && strType != "rest" {
+		c.wrongParamValue("type")
+		return
 	}
 
 	var start time.Time
-	if strStart := r.FormValue("start"); len(strStart) == 0 {
+	var strStart string
+	const shortForm = "2006-01-02 15:04:05.000"
+	var err error
+
+	if strStart = r.FormValue("start"); len(strStart) == 0 {
 		c.emptyParam("start")
 		return
-	} else {
-		const shortForm = "2006-01-02 15:04:05.000"
-		var err error
-		if start, err = time.Parse(shortForm, strStart); err != nil {
-			c.wrongParamValue("start")
-			log.Printf("%+v\n", err)
-			return
-		}
+	}
+	if start, err = time.Parse(shortForm, strStart); err != nil {
+		c.wrongParamValue("start")
+		log.Printf("%+v\n", err)
+		return
 	}
 
 	var end time.Time
-	if strEnd := r.FormValue("end"); len(strEnd) == 0 {
+	var strEnd string
+	if strEnd = r.FormValue("end"); len(strEnd) == 0 {
 		c.emptyParam("end")
 		return
-	} else {
-		const shortForm = "2006-01-02 15:04:05.000"
-		var err error
-		if end, err = time.Parse(shortForm, strEnd); err != nil {
-			c.wrongParamValue("end")
-			log.Printf("%+v\n", err)
-			return
-		}
+	}
+	if end, err = time.Parse(shortForm, strEnd); err != nil {
+		c.wrongParamValue("end")
+		log.Printf("%+v\n", err)
+		return
 	}
 
-	var uri string
-	uri = getMongoURI()
+	uri := getMongoURI()
 
 	log.Println("uri found: ", uri)
 
-	var err error
 	var session *mgo.Session
 
 	log.Println("start dial")
@@ -157,8 +154,7 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 	collection := session.DB("").C("period")
 
 	log.Println("start insert to period entity")
-	var p Period
-	p = Period{
+	p := Period{
 		Type:  strType,
 		Start: start,
 		End:   end,
