@@ -14,7 +14,8 @@ type context struct {
 	w    http.ResponseWriter
 }
 
-// Period hold the information of an activity
+// Periods hold the information of an activity
+//
 type Period struct {
 	Type  string `json:"type"` // pomodoro or rest
 	Start time.Time
@@ -52,6 +53,17 @@ func (c context) wrongMethodPOST() {
 	}
 }
 
+func (c context) wrongMethodGET() {
+	developerMessage := fmt.Sprintf("%v: only GET requests are supported for this route.", c.name)
+	userMessage := "Oops, something went wrong, we are unable to get your data right now."
+	response := createStandardResponse(400, developerMessage, userMessage)
+	c.w.WriteHeader(http.StatusBadRequest)
+	if err := renderJson(c.w, response); err != nil {
+		log.Println(err)
+	}
+	return
+}
+
 func (c context) emptyParam(name string) {
 	developerMessage := fmt.Sprintf("%s, parameter %v is empty, unable to create period.", c.name, name)
 	userMessage := "Oops, something went wrong, we are unable to save your data right now."
@@ -85,7 +97,6 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var strType string
-
 	if strType = r.FormValue("type"); len(strType) == 0 {
 		c.emptyParam("type")
 		return
@@ -97,8 +108,6 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var start time.Time
-	var end time.Time
-
 	if strStart := r.FormValue("start"); len(strStart) == 0 {
 		c.emptyParam("start")
 		return
@@ -112,6 +121,7 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	var end time.Time
 	if strEnd := r.FormValue("end"); len(strEnd) == 0 {
 		c.emptyParam("end")
 		return
@@ -158,6 +168,10 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	log.Println("insert period entity done")
+	c.sendCreatePeriodResponse()
+}
+
+func (c context) sendCreatePeriodResponse() {
 	data := struct {
 		Status           int    `json:"status"`
 		DeveloperMessage string `json:"developerMessage"`
@@ -169,7 +183,7 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("sending response")
-	if err := renderJson(w, data); err != nil {
+	if err := renderJson(c.w, data); err != nil {
 		log.Println(err)
 	}
 }
@@ -177,17 +191,9 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 // getPeriods handler returns a list of periods.
 //
 func getPeriods(w http.ResponseWriter, r *http.Request) {
-
+	c := context{name: "getPeriods"}
 	if r.Method != "GET" {
-		developerMessage := "getPeriods: only GET requests are supported for this route."
-		userMessage := "Oops, something went wrong, we are unable to get your data right now."
-		response := createStandardResponse(400, developerMessage, userMessage)
-		w.WriteHeader(http.StatusBadRequest)
-		log.Println("sending response")
-		if err := renderJson(w, response); err != nil {
-			log.Println(err)
-		}
-		return
+		c.wrongMethodGET()
 	}
 
 	var uri string
@@ -217,6 +223,10 @@ func getPeriods(w http.ResponseWriter, r *http.Request) {
 	if err = collection.Find(nil).All(&results); err != nil {
 		log.Fatal(err)
 	}
+	c.sendGetPeriodsResponse(results)
+}
+
+func (c context) sendGetPeriodsResponse(results Periods) {
 
 	data := struct {
 		Status           int     `json:"status"`
@@ -231,7 +241,8 @@ func getPeriods(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("sending response")
-	if err := renderJson(w, data); err != nil {
+	if err := renderJson(c.w, data); err != nil {
 		log.Println(err)
 	}
+
 }
