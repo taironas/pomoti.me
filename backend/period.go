@@ -168,10 +168,10 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	log.Println("insert period entity done")
-	c.sendCreatePeriodResponse()
+	sendCreatePeriodResponse(w)
 }
 
-func (c context) sendCreatePeriodResponse() {
+func sendCreatePeriodResponse(w http.ResponseWriter) {
 	data := struct {
 		Status           int    `json:"status"`
 		DeveloperMessage string `json:"developerMessage"`
@@ -183,7 +183,7 @@ func (c context) sendCreatePeriodResponse() {
 	}
 
 	log.Println("sending response")
-	if err := renderJson(c.w, data); err != nil {
+	if err := renderJson(w, data); err != nil {
 		log.Println(err)
 	}
 }
@@ -223,10 +223,10 @@ func getPeriods(w http.ResponseWriter, r *http.Request) {
 	if err = collection.Find(nil).All(&results); err != nil {
 		log.Fatal(err)
 	}
-	c.sendGetPeriodsResponse(results)
+	sendGetPeriodsResponse(w, results)
 }
 
-func (c context) sendGetPeriodsResponse(results Periods) {
+func sendGetPeriodsResponse(w http.ResponseWriter, results Periods) {
 
 	data := struct {
 		Status           int     `json:"status"`
@@ -241,7 +241,7 @@ func (c context) sendGetPeriodsResponse(results Periods) {
 	}
 
 	log.Println("sending response")
-	if err := renderJson(c.w, data); err != nil {
+	if err := renderJson(w, data); err != nil {
 		log.Println(err)
 	}
 
