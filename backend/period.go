@@ -79,6 +79,61 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	var start time.Time
+	var end time.Time
+
+	if strStart := r.FormValue("start"); len(strStart) == 0 {
+		developerMessage := "createPeriod had empty start parameter, unable to create period."
+		userMessage := "Oops, something went wrong, we are unable to save your data right now."
+		response := createStandardResponse(400, developerMessage, userMessage)
+		w.WriteHeader(http.StatusBadRequest)
+		log.Println("sending response")
+		if err := renderJson(w, response); err != nil {
+			log.Println(err)
+		}
+		return
+	} else {
+		const shortForm = "02/01/2006"
+		var err error
+		if start, err = time.Parse(shortForm, strStart); err != nil {
+			developerMessage := "createPeriod has wrong type, unable to create period."
+			userMessage := "Oops, something went wrong, we are unable to save your data right now."
+			response := createStandardResponse(400, developerMessage, userMessage)
+			w.WriteHeader(http.StatusBadRequest)
+			log.Println("sending response")
+			if err := renderJson(w, response); err != nil {
+				log.Println(err)
+			}
+			return
+		}
+	}
+
+	if strEnd := r.FormValue("end"); len(strEnd) == 0 {
+		developerMessage := "createPeriod had empty end parameter, unable to create period."
+		userMessage := "Oops, something went wrong, we are unable to save your data right now."
+		response := createStandardResponse(400, developerMessage, userMessage)
+		w.WriteHeader(http.StatusBadRequest)
+		log.Println("sending response")
+		if err := renderJson(w, response); err != nil {
+			log.Println(err)
+		}
+		return
+	} else {
+		const shortForm = "02/01/2006"
+		var err error
+		if end, err = time.Parse(shortForm, strEnd); err != nil {
+			developerMessage := "createPeriod has wrong type, unable to create period."
+			userMessage := "Oops, something went wrong, we are unable to save your data right now."
+			response := createStandardResponse(400, developerMessage, userMessage)
+			w.WriteHeader(http.StatusBadRequest)
+			log.Println("sending response")
+			if err := renderJson(w, response); err != nil {
+				log.Println(err)
+			}
+			return
+		}
+	}
+
 	var uri string
 	uri = getMongoURI()
 
@@ -104,8 +159,8 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 	var p Period
 	p = Period{
 		Type:  strType,
-		Start: time.Now(),
-		End:   time.Now(),
+		Start: start,
+		End:   end,
 	}
 
 	if err = collection.Insert(&p); err != nil {
