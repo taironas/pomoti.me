@@ -60,7 +60,7 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 		userMessage := "Oops, something went wrong, we are unable to save your data right now."
 		response := createStandardResponse(400, developerMessage, userMessage)
 		w.WriteHeader(http.StatusBadRequest)
-		log.Println("sending response")
+		log.Printf("sending response %+v\n", response)
 		if err := renderJson(w, response); err != nil {
 			log.Println(err)
 		}
@@ -71,7 +71,7 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 			userMessage := "Oops, something went wrong, we are unable to save your data right now."
 			response := createStandardResponse(400, developerMessage, userMessage)
 			w.WriteHeader(http.StatusBadRequest)
-			log.Println("sending response")
+			log.Printf("sending response %+v\n", response)
 			if err := renderJson(w, response); err != nil {
 				log.Println(err)
 			}
@@ -87,20 +87,21 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 		userMessage := "Oops, something went wrong, we are unable to save your data right now."
 		response := createStandardResponse(400, developerMessage, userMessage)
 		w.WriteHeader(http.StatusBadRequest)
-		log.Println("sending response")
+		log.Printf("sending response %+v\n", response)
 		if err := renderJson(w, response); err != nil {
 			log.Println(err)
 		}
 		return
 	} else {
-		const shortForm = "02/01/2006"
+		const shortForm = "2006-01-02 15:04:05.000"
 		var err error
 		if start, err = time.Parse(shortForm, strStart); err != nil {
-			developerMessage := "createPeriod has wrong type, unable to create period."
+			developerMessage := "createPeriod has wrong start parameter, unable to create period."
 			userMessage := "Oops, something went wrong, we are unable to save your data right now."
 			response := createStandardResponse(400, developerMessage, userMessage)
 			w.WriteHeader(http.StatusBadRequest)
-			log.Println("sending response")
+			log.Printf("sending response %+v\n", response)
+			log.Printf("%+v\n", err)
 			if err := renderJson(w, response); err != nil {
 				log.Println(err)
 			}
@@ -113,20 +114,21 @@ func createPeriod(w http.ResponseWriter, r *http.Request) {
 		userMessage := "Oops, something went wrong, we are unable to save your data right now."
 		response := createStandardResponse(400, developerMessage, userMessage)
 		w.WriteHeader(http.StatusBadRequest)
-		log.Println("sending response")
+		log.Printf("sending response %+v\n", response)
 		if err := renderJson(w, response); err != nil {
 			log.Println(err)
 		}
 		return
 	} else {
-		const shortForm = "02/01/2006"
+		const shortForm = "2006-01-02 15:04:05.000"
 		var err error
 		if end, err = time.Parse(shortForm, strEnd); err != nil {
-			developerMessage := "createPeriod has wrong type, unable to create period."
+			developerMessage := "createPeriod has wrong end parameter, unable to create period."
 			userMessage := "Oops, something went wrong, we are unable to save your data right now."
 			response := createStandardResponse(400, developerMessage, userMessage)
 			w.WriteHeader(http.StatusBadRequest)
-			log.Println("sending response")
+			log.Printf("sending response %+v\n", response)
+			log.Printf("%+v\n", err)
 			if err := renderJson(w, response); err != nil {
 				log.Println(err)
 			}
